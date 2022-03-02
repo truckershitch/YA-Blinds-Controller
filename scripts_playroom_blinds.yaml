@@ -1,0 +1,105 @@
+### PLAYROOM BLINDS ###
+
+playroom_blinds_set_open:
+  alias: Set Blinds Open Position
+  sequence:
+  - service: mqtt.publish
+    data:
+      topic: &BLINDS_CMD_TOPIC ha/playroom/blinds/cmnd
+      payload: '{"type": "set", "pos": 100}'
+
+playroom_blinds_set_closed:
+  alias: Set Blinds Closed Position
+  sequence:
+  - service: mqtt.publish
+    data:
+      topic: *BLINDS_CMD_TOPIC
+      payload: '{"type": "set", "pos": 0}'
+
+# playroom_blinds_rotate:
+#   alias: Rotate Blinds
+#   sequence:
+#   - service: mqtt.publish
+#     data:
+#       topic: *BLINDS_CMD_TOPIC
+#       payload: >-
+#         {% set cmnd = {
+#             "type": "rot",
+#             "pct": states('input_select.blind_percent') | int
+#           }
+#         %}
+#         {{ cmnd | tojson }}
+
+playroom_blinds_move_position:
+  alias: Move Blinds to Percent Postiion
+  sequence:
+  - service: mqtt.publish
+    data:
+      topic: *BLINDS_CMD_TOPIC
+      payload: >-
+        {% set cmnd = {
+            "type": "pos",
+            "pos": states('input_select.blind_percent') | int
+          }
+        %}
+        {{ cmnd | tojson }}
+
+playroom_blinds_open:
+  alias: Open Playroom Blinds
+  sequence:
+  - service: input_select.select_option
+    target:
+      entity_id: input_select.blind_percent
+    data:
+      option: 100
+  - service: script.playroom_blinds_move_position
+
+playroom_blinds_close:
+  alias: Close Playroom Blinds
+  sequence:
+  - service: input_select.select_option
+    target:
+      entity_id: input_select.blind_percent
+    data:
+      option: 0
+  - service: script.playroom_blinds_move_position
+
+# hey google, set blind window to left
+playroom_blinds_fix_open:
+  alias: Fix Blind Open
+  sequence:
+  - service: mqtt.publish
+    data:
+      topic: *BLINDS_CMD_TOPIC
+      payload: >-
+        {% set cmnd = {
+            "type": "fix",
+            "window": states('input_select.blind_window'),
+            "pct": 10
+          }
+        %}
+        {{ cmnd | tojson }}
+
+playroom_blinds_fix_close:
+  alias: Fix Blind Close
+  sequence:
+  - service: mqtt.publish
+    data:
+      topic: *BLINDS_CMD_TOPIC
+      payload: >-
+        {% set cmnd = {
+            "type": "fix",
+            "window": states('input_select.blind_window'),
+            "pct": -10
+          }
+        %}
+        {{ cmnd | tojson }}
+
+# not used
+playroom_blinds_start_transfer:
+  alias: Start Playroom Blinds Transfer
+  sequence:
+  - service: mqtt.publish
+    data:
+      topic: *BLINDS_CMD_TOPIC
+      payload: '{"type": "transfer"}'

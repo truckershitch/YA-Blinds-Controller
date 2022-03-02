@@ -1,0 +1,14 @@
+{
+    "name": "playroom-blinds",
+    "stubs": {
+        "micropython-v1_16-esp8266": "1.3.2"
+    },
+    "dev-packages": {
+        "micropy-cli": "*"
+    },
+    "packages": {},
+    "config": {
+        "vscode": true,
+        "pylint": true
+    }
+}

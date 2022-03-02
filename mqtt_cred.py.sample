@@ -1,0 +1,12 @@
+"""Playroom Blinds Controller MQTT Parameters"""
+BROKER='www.xxx.yyy.zzz'
+PORT=1883
+USER='mqtt_user'
+PASS='mqtt_password'
+DEVICE_NAME='clever_device_name'
+CLIENT_NAME='random_mqtt_client_name'
+TOPIC_PREFIX='your_room/blinds_name/' # ends in '/'
+TOPIC_SUB=TOPIC_PREFIX+'cmnd'
+TOPIC_CMND=TOPIC_PREFIX+'cmnd'
+TOPIC_HB=TOPIC_PREFIX+'hb'
+TOPIC_STAT=TOPIC_PREFIX+'stat'
